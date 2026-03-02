@@ -1,18 +1,13 @@
 #%%
 import pandas as pd 
-import numpy as np
-from datetime import datetime  
 from xgboost import XGBRegressor 
-import xgboost as xgb
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error, r2_score
 import holidays
 import glob
 import os
 import time
 from codecarbon import EmissionsTracker
-import matplotlib.pyplot as plt
-import seaborn as sns 
 import joblib
 #%%
 # Função para importar dataset de uma pasta
@@ -82,7 +77,7 @@ def carregar_e_preparar(caminho_energia, caminho_inmet=None):
     df['trimestre'] = df['din_instante'].dt.quarter
     df['ano'] = df['din_instante'].dt.year
     #Feriados e fins de semana
-    br_holidays = holidays.Brazil()
+    br_holidays = holidays.Brazil(language='en_US')
     # Criando uma coluna para indicar se o dia é feriado ou fim de semana
     df['is_feriado'] = df['din_instante'].apply(lambda x: 1 if x in br_holidays else 0)
     # Criando uma coluna para indicar se o dia é fim de semana
@@ -107,7 +102,7 @@ def carregar_e_preparar(caminho_energia, caminho_inmet=None):
                           right_on= ['data_clima', 'id_subsistema'], how='left')
             print(f"Dados de clima da pasta {clima_alvo} integrados com sucesso.")
     # Retornando o DataFrame final após a preparação dos dados, removendo linhas com valores ausentes
-            return df.dropna()
+    return df.dropna()
 # %%
 # Treinamento do modelo e rastreamento de emissões de carbono
 def treinar_modelo_com_rastreamento_carbono(df, subsistema='SE'):
