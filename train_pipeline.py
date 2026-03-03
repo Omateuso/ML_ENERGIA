@@ -112,7 +112,7 @@ def carregar_e_preparar(caminho_energia, caminho_inmet=None):
 # Treinamento do modelo e rastreamento de emissões de carbono
 def treinar_modelo_com_rastreamento_carbono(df, regiao='SE'):
     # Filtrando dados para a região específica
-    df_sub = df[df['id_subsistema'] == regiao]
+    df_sub = df[df['id_subsistema'] == regiao].copy()
     nome_exibicao = NOMES_REGIOES.get(regiao, regiao)
 
     if df_sub.empty:
@@ -127,12 +127,14 @@ def treinar_modelo_com_rastreamento_carbono(df, regiao='SE'):
         features.append('umidade_media')
 
     df_sub['delta_carga'] = df_sub['val_cargaenergiamwmed'] - df_sub['carga_ontem']
+    df_sub = df_sub.dropna(subset=features + ['delta_carga'])
 
     X = df_sub[features]
     y = df_sub['delta_carga']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=False)
     
+    if not os.path.exists('output/carbon'): os.makedirs('output/carbon')
     tracker = EmissionsTracker(project_name="Previsao_Energia_XGBoost", output_dir="output/carbon")
     tracker.start()
     

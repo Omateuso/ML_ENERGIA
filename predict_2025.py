@@ -1,11 +1,10 @@
-#%%
 import joblib
 import pandas as pd
 import numpy as np
 import os
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from train_pipeline import carregar_e_preparar, NOMES_REGIOES
-#%%
+
 def avaliar_desempenho(df, regiao_sigla):
     if df.empty:
         return
@@ -22,7 +21,7 @@ def avaliar_desempenho(df, regiao_sigla):
     print(f"Erro Médio Absoluto (MAE): {mae:.2f} MWmed")
     print(f"Raiz do Erro Quadrático Médio (RMSE): {rmse:.2f} MWmed")
     print(f"R² Score (Variância explicada): {r2:.4f}")
-#%%
+
 # Função para fazer previsão
 def fazer_previsao(caminho_csv_2025, caminho_inmet_2025, regiao='SE'):
     # Carregando modelo treinado usando a sigla (id_subsistema)
@@ -57,7 +56,7 @@ def fazer_previsao(caminho_csv_2025, caminho_inmet_2025, regiao='SE'):
     resultado = df_sub[['din_instante', 'val_cargaenergiamwmed']].copy()
     resultado['previsao_modelo'] = previsoes_absolutas
     return resultado
-#%%
+
 # Testando com os dados de 2025
 if __name__ == "__main__":
     caminho_2025 = 'dataset/2025/CARGA_ENERGIA_2025.csv'
@@ -85,4 +84,3 @@ if __name__ == "__main__":
                     df_final.to_csv(f'{pasta_saida}/previsao_2025_{sigla}.csv', index=False)
             except Exception as e:
                 print(f"Região {nome_regiao} pulada por motivo: {e}")
-#%%

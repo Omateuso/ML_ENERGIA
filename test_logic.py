@@ -73,6 +73,8 @@ def test_treinar_modelo_with_valid_data(sample_energy_data):
     df['is_fds'] = 0
     df['media_7d'] = df['val_cargaenergiamwmed'].rolling(7).mean()
     df['temp_media'] = np.random.uniform(20, 30, len(df))
+
+    df = df.dropna()
     
     with patch('codecarbon.EmissionsTracker'):
         result = train_module.treinar_modelo_com_rastreamento_carbono(df, regiao='SE')
@@ -100,6 +102,8 @@ def test_model_persistence(sample_energy_data, tmp_path):
     df['is_feriado'] = 0
     df['is_fds'] = 0
     df['media_7d'] = df['val_cargaenergiamwmed'].rolling(7).mean()
+
+    df = df.dropna()
     
     with patch('codecarbon.EmissionsTracker'):
         model = train_module.treinar_modelo_com_rastreamento_carbono(df, regiao='SE')
