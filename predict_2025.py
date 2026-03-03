@@ -49,11 +49,13 @@ def fazer_previsao(caminho_csv_2025, caminho_inmet_2025, regiao='SE'):
     X_new = df_sub[features]
 
     # Fazendo previsão
-    previsoes = modelo.predict(X_new)
+    previsoes_delta = modelo.predict(X_new)
+
+    previsoes_absolutas = df_sub['carga_ontem'] + previsoes_delta
 
     # Formatando resultado
     resultado = df_sub[['din_instante', 'val_cargaenergiamwmed']].copy()
-    resultado['previsao_modelo'] = previsoes
+    resultado['previsao_modelo'] = previsoes_absolutas
     return resultado
 #%%
 # Testando com os dados de 2025

@@ -126,8 +126,10 @@ def treinar_modelo_com_rastreamento_carbono(df, regiao='SE'):
     if 'umidade_media' in df_sub.columns and regiao != 'NE':
         features.append('umidade_media')
 
+    df_sub['delta_carga'] = df_sub['val_cargaenergiamwmed'] - df_sub['carga_ontem']
+
     X = df_sub[features]
-    y = df_sub['val_cargaenergiamwmed']
+    y = df_sub['delta_carga']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=False)
     
