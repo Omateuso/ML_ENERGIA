@@ -1,10 +1,9 @@
-#%%
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import glob
 from train_pipeline import NOMES_REGIOES
-#%%
+
 def gerar_graficos_comparativos(pasta_input='output/previsao'):
     # Procurando arquivos de previsão gerados na pasta output
     arquivos = glob.glob(os.path.join(pasta_input, 'previsao_2025_*.csv'))
@@ -51,4 +50,3 @@ def gerar_graficos_comparativos(pasta_input='output/previsao'):
 
 if __name__ == "__main__":
     gerar_graficos_comparativos()
-#%%

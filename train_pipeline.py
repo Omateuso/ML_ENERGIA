@@ -1,4 +1,3 @@
-#%%
 import pandas as pd 
 from xgboost import XGBRegressor 
 from sklearn.model_selection import train_test_split
@@ -18,7 +17,6 @@ NOMES_REGIOES = {
     'SE': 'Sudeste'
 }
 
-#%%
 # Função para importar dataset de uma pasta
 def processar_dados(caminho_pasta = 'dataset/2024/INMET_2024'):
     # Processando dados de clima
@@ -69,7 +67,6 @@ def processar_dados(caminho_pasta = 'dataset/2024/INMET_2024'):
     clima_regional.rename(columns={coluna_temp: 'temp_media', coluna_umi: 'umidade_media', 'Data': 'data_clima'}, inplace=True)
     return clima_regional
 
-#%%
 # Função para carregamento e preparação dos dados
 def carregar_e_preparar(caminho_energia, caminho_inmet=None):
     # Verificando se o arquivo de energia existe
@@ -108,7 +105,6 @@ def carregar_e_preparar(caminho_energia, caminho_inmet=None):
             print(f"Dados de clima da pasta {clima_alvo} integrados com sucesso.")
     return df.dropna()
 
-# %%
 # Treinamento do modelo e rastreamento de emissões de carbono
 def treinar_modelo_com_rastreamento_carbono(df, regiao='SE'):
     # Filtrando dados para a região específica
@@ -162,7 +158,6 @@ def treinar_modelo_com_rastreamento_carbono(df, regiao='SE'):
     print(f"Emissões de carbono: {emissions:.2f} kg CO₂")
     return model
 
-# %%
 if __name__ == "__main__":
     caminho_energia = 'dataset/2024/CARGA_ENERGIA_2024.csv'
     caminho_inmet = 'dataset/2024/INMET_2024'
@@ -186,4 +181,4 @@ if __name__ == "__main__":
                 print(f"Modelo para a região {nome_regiao} salvo como {nome_arquivo}")
     except FileNotFoundError as e:
         print(e)
-# %%
+
