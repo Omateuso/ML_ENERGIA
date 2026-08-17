@@ -1,0 +1,24 @@
+# Dados sao reprodutiveis via scripts/01_coletar.py -- nao versionar.
+# dataset/ era o layout antigo, ja removido da arvore; a entrada fica aqui
+# so para impedir que volte por engano.
+data/
+dataset/
+
+# Artefatos gerados
+modelos/
+output/
+
+# Ambiente
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
