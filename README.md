@@ -284,12 +284,18 @@ O Norte quase não responde — coerente com a carga industrial dominante.
 Requer **Python 3.12 ou superior** — `numpy 2.5` não publica distribuição
 para versões anteriores.
 
+**Nenhum dado vem no repositório.** Ele guarda só o código; os ~195 MB de
+dados brutos são baixados das fontes oficiais pelo `01_coletar.py`, que é a
+única forma sancionada de obtê-los. Isso mantém o clone leve e garante que
+todo mundo trabalhe sobre os arquivos originais do ONS, INMET e EPE, sem
+cópias intermediárias de procedência duvidosa.
+
 ```bash
 python -m venv .venv
 .venv/Scripts/activate            # Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt
 
-python scripts/01_coletar.py           # ~195 MB, alguns minutos
+python scripts/01_coletar.py           # baixa ~195 MB; ver detalhes abaixo
 python scripts/02_construir_dataset.py
 python scripts/03_treinar.py
 python scripts/04_avaliar.py
@@ -300,6 +306,34 @@ python scripts/06_projetar_ano.py --ano 2025 --com-clima-observado   # backtest
 streamlit run app/app.py               # interface gráfica
 pytest                                 # 96 testes
 ```
+
+### Coleta dos dados
+
+`01_coletar.py` baixa as três fontes e as deposita em `data/raw/`, que é
+tratado como camada imutável — nada além do script escreve ali.
+
+| Fonte | O que baixa | Tamanho | Destino |
+|---|---|---|---|
+| ONS | `CARGA_ENERGIA_<ano>.csv` — carga diária por subsistema | ~55 KB/ano | `data/raw/ons/` |
+| INMET | `<ano>.zip` — séries horárias de todas as estações | ~90 MB/ano | `data/raw/inmet/` |
+| EPE | `consumo_mensal_por_classe.xlsx` — consumo industrial | ~1,6 MB | `data/raw/epe/` |
+
+```bash
+python scripts/01_coletar.py                       # anos padrão (2024 e 2025)
+python scripts/01_coletar.py --anos 2022 2023 2024 2025    # mais histórico
+```
+
+O script é idempotente: arquivo já presente não é rebaixado. Use `--forcar`
+para rebaixar mesmo assim.
+
+**O que dá para apagar depois.** Concluída a coleta, `02_construir_dataset.py`
+grava um cache agregado do clima em `data/interim/` (~300 KB). A partir daí os
+CSVs extraídos do INMET (~750 MB) não são mais lidos e podem ser removidos —
+os `.zip` bastam para reprocessar. Apenas `data/interim/` e `data/processed/`
+são necessários para treinar, prever e rodar a interface.
+
+**Reprocessar do zero:** `python scripts/02_construir_dataset.py --sem-cache`
+(reextrai dos zips e reagrega o clima horário).
 
 Outros anos: `python scripts/01_coletar.py --anos 2023 2024 2025`, depois
 `03_treinar.py --ano-treino 2024` e `04_avaliar.py --ano-teste 2025`.
