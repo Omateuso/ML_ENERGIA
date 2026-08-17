@@ -1,7 +1,7 @@
 # Previsão de carga de energia do SIN a partir do clima
 
 [![testes](https://github.com/Omateuso/ML_ENERGIA/actions/workflows/testes.yml/badge.svg)](https://github.com/Omateuso/ML_ENERGIA/actions/workflows/testes.yml)
-![python](https://img.shields.io/badge/python-3.11%2B-blue)
+![python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 
 Prevê a carga diária de energia (MWmed) dos quatro subsistemas do Sistema
@@ -270,7 +270,7 @@ O Norte quase não responde — coerente com a carga industrial dominante.
 │   └── previsao.py              API de previsão usada pela interface
 ├── app/app.py                   interface Streamlit
 ├── docs/                        imagens do README
-├── .github/workflows/           CI (pytest em 3.11, 3.12 e 3.13)
+├── .github/workflows/           CI (pytest em 3.12, 3.13 e 3.14)
 ├── scripts/                     01_coletar → 06_projetar_ano
 ├── tests/                       96 testes
 ├── modelos/                     .joblib por modo e região
@@ -281,8 +281,8 @@ O Norte quase não responde — coerente com a carga industrial dominante.
 
 ## Como executar
 
-Requer **Python 3.11 ou superior** (`pandas 3.x` e `numpy 2.x` não suportam
-versões anteriores).
+Requer **Python 3.12 ou superior** — `numpy 2.5` não publica distribuição
+para versões anteriores.
 
 ```bash
 python -m venv .venv

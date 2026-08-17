@@ -17,8 +17,13 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# Editor / SO
+# Editor / SO / ferramentas
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Configuracao local do Claude Code -- nao versionar.
+# Ficava protegido so pelo gitignore global da maquina, que nao acompanha
+# o repositorio; aqui a protecao viaja junto.
+.claude/
