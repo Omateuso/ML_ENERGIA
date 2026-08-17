@@ -340,6 +340,11 @@ with aba_sim:
         ax.barh(["Previsão"], [clima], left=[nivel],
                 color=VERMELHO if clima >= 0 else "#2ca02c",
                 label="Resposta climática")
+        # Com o eixo saindo de zero, a resposta climatica (poucos % do nivel)
+        # vira uma lasca ilegivel. Enquadra na faixa onde a acao acontece.
+        folga = max(abs(clima) * 2.5, nivel * 0.06)
+        ax.set_xlim(min(nivel, previsto) - folga, max(nivel, previsto) + folga)
+        ax.axvline(nivel, color="black", linewidth=0.8, linestyle=":")
         ax.set_xlabel("MWmed")
         ax.legend(fontsize=8, loc="lower right")
         ax.grid(True, axis="x", linestyle=":", alpha=0.4)

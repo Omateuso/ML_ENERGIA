@@ -254,7 +254,12 @@ def projetar_ano(ano: int, regioes: list[str] | None = None,
     fim = pd.Timestamp(year=ano, month=12, day=31)
 
     if clima is None or clima.empty:
+        # Sem clima informado, a semente e so um gancho para gerar a grade.
+        # Marcar essa linha como vinda de "arquivo" seria mentira: o ano
+        # inteiro veio da climatologia.
         semente = pd.DataFrame({"id_subsistema": regioes, "din_instante": inicio})
+        r = prever(completar_periodo(semente, de=inicio, ate=fim))
+        return r.assign(origem="climatologia")
     else:
         semente = clima[clima["id_subsistema"].isin(regioes)].copy()
         faltantes = [r for r in regioes if r not in set(semente["id_subsistema"])]

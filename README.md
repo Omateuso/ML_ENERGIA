@@ -1,13 +1,24 @@
 # Previsão de carga de energia do SIN a partir do clima
 
+[![testes](https://github.com/Omateuso/ML_ENERGIA/actions/workflows/testes.yml/badge.svg)](https://github.com/Omateuso/ML_ENERGIA/actions/workflows/testes.yml)
+![python](https://img.shields.io/badge/python-3.11%2B-blue)
+![licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
+
 Prevê a carga diária de energia (MWmed) dos quatro subsistemas do Sistema
-Interligado Nacional — Norte, Nordeste, Sul e Sudeste/Centro-Oeste — usando
-clima, calendário e patamar industrial.
+Interligado Nacional — Norte, Nordeste, Sul e Sudeste/Centro-Oeste — mais o
+agregado nacional, usando clima, calendário e patamar industrial.
 
 O projeto é organizado em torno de uma pergunta: **a previsão está mesmo
 apoiada no clima, ou está reciclando a carga observada que também serve de
 gabarito?** Toda a estrutura de features, modos de previsão e avaliação existe
 para tornar essa pergunta respondível.
+
+![Carga versus temperatura por subsistema](docs/carga_vs_temperatura.png)
+
+*A relação que o modelo aprende. O Sul tem curva em U (aquecimento à esquerda,
+refrigeração à direita), o Sudeste sobe acima de 22 °C, e o Norte é quase
+plano — por ser dominado por carga eletrointensiva, que não responde a
+temperatura. Azul é dia útil, laranja é fim de semana.*
 
 ---
 
@@ -140,13 +151,19 @@ a carga prevista decomposta em *nível de base* (patamar industrial) e *resposta
 climática* (quanto o clima e o calendário somam ou tiram), com um histograma
 mostrando onde a previsão cai frente aos dias históricos da mesma época.
 
+![Simulador](docs/app_simulador.png)
+
 **Resposta térmica** — varre a temperatura mantendo o resto fixo e desenha a
 curva de sensibilidade da região, sobreposta aos dias observados. É o gráfico
 que mostra a curva em U do Sul e a subida do Sudeste acima de 22 °C.
 
+![Resposta térmica](docs/app_resposta_termica.png)
+
 **Projeção anual** — escolhe um ano e devolve a **carga média do ano em MWmed**
 e a **energia em TWh**, por subsistema e para o SIN, com o perfil mensal. O
 clima vem da climatologia (ano normal) ou do clima observado, quando existe.
+
+![Projeção anual](docs/app_projecao_anual.png)
 
 Backtest de 2025, projetando com o clima real e comparando com o observado:
 
@@ -252,6 +269,8 @@ O Norte quase não responde — coerente com a carga industrial dominante.
 │   ├── avaliacao.py             métricas, baselines, teste de contaminação
 │   └── previsao.py              API de previsão usada pela interface
 ├── app/app.py                   interface Streamlit
+├── docs/                        imagens do README
+├── .github/workflows/           CI (pytest em 3.11, 3.12 e 3.13)
 ├── scripts/                     01_coletar → 06_projetar_ano
 ├── tests/                       96 testes
 ├── modelos/                     .joblib por modo e região
@@ -261,6 +280,9 @@ O Norte quase não responde — coerente com a carga industrial dominante.
 ---
 
 ## Como executar
+
+Requer **Python 3.11 ou superior** (`pandas 3.x` e `numpy 2.x` não suportam
+versões anteriores).
 
 ```bash
 python -m venv .venv
@@ -322,3 +344,9 @@ O diretório `dataset/` do projeto antigo (1,1 GB) foi removido da árvore, mas
 **continua no histórico do git** — o pack ainda pesa ~258 MB. Tirá-lo do
 histórico exigiria `git filter-repo`, que reescreve todos os commits e quebra
 clones existentes; ficou deliberadamente de fora.
+
+---
+
+## Licença
+
+MIT — veja [LICENSE](LICENSE).
